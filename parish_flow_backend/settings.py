@@ -27,19 +27,30 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
-
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+# Apps available in the public schema (shared by all tenants)
+SHARED_APPS = [
+    "django_tenants",  # Django-Tenants must be first
+    "django.contrib.admin",  #
+    "django.contrib.auth",
+    "django.contrib.contenttypes",  # Keep contenttypes here, remove from TENANT_APPS
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    #"django.contrib.staticfiles",
+    "parish",  # Include apps that need access to the public schema
 ]
 
+# Apps that should be available per tenant (inside tenant schemas)
+TENANT_APPS = [
+    #"django.contrib.auth",  # Needed for user management inside tenants
+    #"parish",  # Your custom app (tenant-specific models)
+    "django.contrib.staticfiles",
+]
+
+# Override INSTALLED_APPS to include both shared and tenant apps
+INSTALLED_APPS = SHARED_APPS + TENANT_APPS
+
 MIDDLEWARE = [
+    'middleware.tenant_middleware.TenantHeaderMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -75,10 +86,16 @@ WSGI_APPLICATION = 'parish_flow_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        "ENGINE": "django_tenants.postgresql_backend",
+        "NAME": "parish_db",
+        "USER": "postgres",
+        "PASSWORD": "Pa$$word",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 }
+
+DATABASE_ROUTERS = ("django_tenants.routers.TenantSyncRouter",)
 
 
 # Password validation
@@ -121,3 +138,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+TENANT_MODEL = "parish.Parish"
+TENANT_DOMAIN_MODEL = "parish.Domain"
