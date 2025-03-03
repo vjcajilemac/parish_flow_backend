@@ -39,7 +39,7 @@ SHARED_APPS = [
     #"django.contrib.staticfiles",
     "parish",  # Include apps that need access to the public schema
     "apps.ACL",
-    "apps.scholar"
+    "apps.school"
 ]
 
 # Apps that should be available per tenant (inside tenant schemas)
