@@ -35,6 +35,7 @@ SHARED_APPS = [
     "django.contrib.contenttypes",  # Keep contenttypes here, remove from TENANT_APPS
     "django.contrib.sessions",
     "django.contrib.messages",
+    "rest_framework",
     #"django.contrib.staticfiles",
     "parish",  # Include apps that need access to the public schema
 ]
