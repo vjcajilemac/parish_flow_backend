@@ -38,6 +38,8 @@ SHARED_APPS = [
     "rest_framework",
     #"django.contrib.staticfiles",
     "parish",  # Include apps that need access to the public schema
+    "apps.ACL",
+    "apps.scholar"
 ]
 
 # Apps that should be available per tenant (inside tenant schemas)
