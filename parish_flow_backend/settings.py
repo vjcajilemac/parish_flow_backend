@@ -36,6 +36,7 @@ SHARED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "rest_framework",
+    'corsheaders',
     #"django.contrib.staticfiles",
     "parish",  # Include apps that need access to the public schema
     "apps.ACL",
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'middleware.tenant_middleware.TenantHeaderMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # CORS middleware
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -144,3 +146,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TENANT_MODEL = "parish.Parish"
 TENANT_DOMAIN_MODEL = "parish.Domain"
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173"
+]
